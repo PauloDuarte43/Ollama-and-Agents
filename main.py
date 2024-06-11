@@ -7,7 +7,7 @@ from langchain_community.tools import DuckDuckGoSearchRun
 search_tool = DuckDuckGoSearchRun()
 
 researcher = Agent(
-    role='Researcher',
+    role='researcher',
     goal='Search the internet for the information requested',
     backstory="""
     You are a researcher. Using the information in the task, you find out some of the most popular facts about the topic along with some of the trending aspects.
@@ -18,9 +18,8 @@ researcher = Agent(
     tools=[search_tool],
     llm=ollama_llm
 )
-
 writer = Agent(
-    role='Tech Content Strategist',
+    role='writer',
     goal='Craft compelling content on a set of information provided by the researcher.',
     backstory="""You are a writer known for your humorous but informative way of explaining. 
     You transform complex concepts into compelling narratives.""",
@@ -28,14 +27,12 @@ writer = Agent(
     allow_delegation=True,
     llm=ollama_llm
 )
-
 task1 = Task(
     description="""Research about open source LLMs vs closed source LLMs. 
     Your final answer MUST be a full analysis report""",
     agent=researcher,
     expected_output='A refined finalized version of the blog post in markdown format'
 )
-
 task2 = Task(
     description="""Using the insights provided, develop an engaging blog
     post that highlights the most significant facts and differences between open-source LLMs and closed-source LLMs.
@@ -46,12 +43,10 @@ task2 = Task(
     agent=writer,
     expected_output='A refined finalized version of the blog post in markdown format'
 )
-
 crew = Crew(
 agents=[researcher, writer],
 tasks=[task1, task2],
-verbose=2, # You can set it to 1 or 2 for different logging levels
+verbose=2,
 )
-
-# Get your crew to work!
 result = crew.kickoff()
+print(result)
